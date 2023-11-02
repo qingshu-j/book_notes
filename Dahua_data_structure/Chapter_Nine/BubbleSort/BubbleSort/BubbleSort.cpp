@@ -77,6 +77,8 @@ void BubbleSort3(int* p, int len)
 	}
 }
 
+//冒泡排序：时间复杂度度O(n2);空间复杂度1
+
 int main()
 {
 	int mylist[] = /*{2,1,3,4,5,6,7,8,9}*/{9,1,5,8,3,7,4,6,2};
