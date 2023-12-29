@@ -1,0 +1,9 @@
+**/*.html
+/adobe_photoshop_sdk_2023_win_v1/*
+!/adobe_photoshop_sdk_2023_win_v1/pluginsdk/
+/adobe_photoshop_sdk_2023_win_v1/pluginsdk/documentation/
+/adobe_photoshop_sdk_2023_win_v1/pluginsdk/samplecode/*
+!/adobe_photoshop_sdk_2023_win_v1/pluginsdk/samplecode/common/
+!/adobe_photoshop_sdk_2023_win_v1/pluginsdk/samplecode/automation/
+/adobe_photoshop_sdk_2023_win_v1/pluginsdk/samplecode/automation/*
+!/adobe_photoshop_sdk_2023_win_v1/pluginsdk/samplecode/automation/listener
