@@ -994,8 +994,8 @@ returnError:
 
 void mycopy()
 {
-	//PlayeventCopy();
-	//PlayeventPaste();
+	PlayeventCopy();
+	PlayeventPaste();
 	PlayeventMake();
 }
 

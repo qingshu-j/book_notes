@@ -92,7 +92,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\..\Output\$(Platform)\$(Configuration)\ugeePlugin.8li</OutputFile>
+      <OutputFile>..\..\..\Output\$(Platform)\$(Configuration)\shortcutKey.8li</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\common;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
