@@ -76,6 +76,8 @@ SPErr PlayeventMake(/*your parameters go here*/void);
 void MyShutdown(void);
 void MyStartup(void);
 void mycopy();
+SPErr PlayeventSet(/*your parameters go here*/void);
+SPErr PlayeventSelect(/*your parameters go here*/void);
 
 //-------------------------------------------------------------------------------
 //	Prototypes.
@@ -167,16 +169,16 @@ DLLExport SPAPI SPErr AutoPluginMain(
 			// time to start our plug in
 			if (sSPBasic->IsEqual(selector, kSPInterfaceStartupSelector))
 			{
-				//error = Startup();
-				MyStartup();
+				error = Startup();
+				//MyStartup();
 			}
 
 
 			// time to end our plug in
 			if (sSPBasic->IsEqual(selector, kSPInterfaceShutdownSelector))
 			{
-				//error = Shutdown();
-				MyShutdown();
+				error = Shutdown();
+				//MyShutdown();
 			}
 		}
 		
@@ -190,11 +192,15 @@ DLLExport SPAPI SPErr AutoPluginMain(
 				//to a PSActionsPlugInMessage* and get the action parameters
 
 				//PSActionsPlugInMessage* actionsMessage;
-				//actionsMessage = (PSActionsPlugInMessage*) message;
+				//actionsMessage = (PSActionsPlugInMessage*)message;
 				//PIActionParameters* actionParams;
 				//actionParams = actionsMessage->actionParameters;
 				//error = Execute(actionParams);
-				mycopy();
+				//mycopy();
+
+				PlayeventSelect();
+				PlayeventSet();
+				
 			}
 		}
 	}
@@ -931,6 +937,382 @@ returnError:
 	return error;
 }
 
+//SPErr PlayeventMake(/*your parameters go here*/void)
+//{
+//	PIActionDescriptor result = NULL;
+//	DescriptorTypeID runtimeKeyID;
+//	DescriptorTypeID runtimeTypeID;
+//	DescriptorTypeID runtimeObjID;
+//	DescriptorTypeID runtimeEnumID;
+//	DescriptorTypeID runtimeClassID;
+//	DescriptorTypeID runtimePropID;
+//	DescriptorTypeID runtimeUnitID;
+//	SPErr error = kSPNoError;
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000ce0 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000ce0);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionReference ref0000000000000140 = NULL;
+//	error = sPSActionReference->Make(&ref0000000000000140);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("layerSection", &runtimeClassID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("layerSection", &runtimeClassID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionReference->PutClass(ref0000000000000140, runtimeClassID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutReference(desc0000000000000ce0, keyNull, ref0000000000000140);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("layerSectionStart", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutInteger(desc0000000000000ce0, runtimeKeyID, 18);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("layerSectionEnd", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutInteger(desc0000000000000ce0, runtimeKeyID, 19);
+//	if (error) goto returnError;
+//
+//	// Unicode String as UTF8: 缁?1
+//	error = sPSActionDescriptor->PutString(desc0000000000000ce0, keyName, "组 1");
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->Play(&result, eventMake, desc0000000000000ce0, plugInDialogSilent);
+//	if (error) goto returnError;
+//
+//returnError:
+//	if (result != NULL) sPSActionDescriptor->Free(result);
+//	if (desc0000000000000ce0 != NULL) sPSActionDescriptor->Free(desc0000000000000ce0);
+//	if (ref0000000000000140 != NULL) sPSActionReference->Free(ref0000000000000140);
+//	return error;
+//}
+
+//SPErr PlayhostFocusChanged(/*your parameters go here*/void)
+//{
+//	PIActionDescriptor result = NULL;
+//	DescriptorTypeID runtimeKeyID;
+//	DescriptorTypeID runtimeTypeID;
+//	DescriptorTypeID runtimeObjID;
+//	DescriptorTypeID runtimeEnumID;
+//	DescriptorTypeID runtimeClassID;
+//	DescriptorTypeID runtimePropID;
+//	DescriptorTypeID runtimeUnitID;
+//	DescriptorTypeID runtimeEventID;
+//	SPErr error = kSPNoError;
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000be0 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000be0);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("active", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutBoolean(desc0000000000000be0, runtimeKeyID, true);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("dontRecord", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutBoolean(desc0000000000000be0, runtimeKeyID, true);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("forceNotify", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutBoolean(desc0000000000000be0, runtimeKeyID, true);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("hostFocusChanged", &runtimeEventID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->Play(&result, runtimeEventID, desc0000000000000be0, plugInDialogSilent);
+//	if (error) goto returnError;
+//
+//returnError:
+//	if (result != NULL) sPSActionDescriptor->Free(result);
+//	if (desc0000000000000be0 != NULL) sPSActionDescriptor->Free(desc0000000000000be0);
+//	return error;
+//}
+
+SPErr PlayeventSet(/*your parameters go here*/void)
+{
+	PIActionDescriptor result = NULL;
+	DescriptorTypeID runtimeKeyID;
+	DescriptorTypeID runtimeTypeID;
+	DescriptorTypeID runtimeObjID;
+	DescriptorTypeID runtimeEnumID;
+	DescriptorTypeID runtimeClassID;
+	DescriptorTypeID runtimePropID;
+	DescriptorTypeID runtimeUnitID;
+	SPErr error = kSPNoError;
+	// Move this to the top of the routine!
+	PIActionDescriptor desc0000000000000c00 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc0000000000000c00);
+	if (error) goto returnError;
+
+	// Move this to the top of the routine!
+	PIActionReference ref0000000000000110 = NULL;
+	error = sPSActionReference->Make(&ref0000000000000110);
+	if (error) goto returnError;
+
+	error = sPSActionReference->PutProperty(ref0000000000000110, classLayer, keyBackground);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutReference(desc0000000000000c00, keyNull, ref0000000000000110);
+	if (error) goto returnError;
+
+	// Move this to the top of the routine!
+	PIActionDescriptor desc0000000000000c08 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc0000000000000c08);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutUnitFloat(desc0000000000000c08, keyOpacity, unitPercent, 50);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutEnumerated(desc0000000000000c08, keyMode, typeBlendMode, enumDissolve);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutObject(desc0000000000000c00, keyTo, classLayer, desc0000000000000c08);
+	if (error) goto returnError;
+
+	int iLayerID = 0;
+	error = sPSActionDescriptor->GetInteger(desc0000000000000c00, keyLayerID, &iLayerID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutInteger(desc0000000000000c00, keyLayerID, iLayerID);
+	if (error) goto returnError;
+
+	error = sPSActionControl->Play(&result, eventSet, desc0000000000000c00, plugInDialogDisplay);
+	if (error) goto returnError;
+
+returnError:
+	if (result != NULL) sPSActionDescriptor->Free(result);
+	if (desc0000000000000c00 != NULL) sPSActionDescriptor->Free(desc0000000000000c00);
+	if (ref0000000000000110 != NULL) sPSActionReference->Free(ref0000000000000110);
+	if (desc0000000000000c08 != NULL) sPSActionDescriptor->Free(desc0000000000000c08);
+	return error;
+}
+
+//SPErr PlaypifInvalidatedAttributes(/*your parameters go here*/void)
+//{
+//	PIActionDescriptor result = NULL;
+//	DescriptorTypeID runtimeKeyID;
+//	DescriptorTypeID runtimeTypeID;
+//	DescriptorTypeID runtimeObjID;
+//	DescriptorTypeID runtimeEnumID;
+//	DescriptorTypeID runtimeClassID;
+//	DescriptorTypeID runtimePropID;
+//	DescriptorTypeID runtimeUnitID;
+//	DescriptorTypeID runtimeEventID;
+//	
+//	SPErr error = kSPNoError;
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000c18 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000c18);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutInteger(desc0000000000000c18, keyDocumentID, 85);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionList list0000000000000058 = NULL;
+//	error = sPSActionList->Make(&list0000000000000058);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000c20 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000c20);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("attributeType", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	// Unicode String as UTF8: classification
+//	error = sPSActionDescriptor->PutString(desc0000000000000c20, runtimeKeyID, "classification");
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000c28 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000c28);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sheetID", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutInteger(desc0000000000000c28, runtimeKeyID, 1);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeObjID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutObject(desc0000000000000c20, runtimeKeyID, runtimeObjID, desc0000000000000c28);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("pifAttributeKey", &runtimeClassID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionList->PutObject(list0000000000000058, runtimeClassID, desc0000000000000c20);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000c30 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000c30);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("attributeType", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	// Unicode String as UTF8: faces
+//	error = sPSActionDescriptor->PutString(desc0000000000000c30, runtimeKeyID, "faces");
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000c38 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000c38);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sheetID", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutInteger(desc0000000000000c38, runtimeKeyID, 1);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeObjID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutObject(desc0000000000000c30, runtimeKeyID, runtimeObjID, desc0000000000000c38);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("pifAttributeKey", &runtimeClassID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionList->PutObject(list0000000000000058, runtimeClassID, desc0000000000000c30);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("pifAttributeList", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutList(desc0000000000000c18, runtimeKeyID, list0000000000000058);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("pifInvalidatedAttributes", &runtimeEventID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->Play(&result, runtimeEventID, desc0000000000000c18, plugInDialogSilent);
+//	if (error) goto returnError;
+//
+//returnError:
+//	if (result != NULL) sPSActionDescriptor->Free(result);
+//	if (desc0000000000000c18 != NULL) sPSActionDescriptor->Free(desc0000000000000c18);
+//	if (list0000000000000058 != NULL) sPSActionList->Free(list0000000000000058);
+//	if (desc0000000000000c20 != NULL) sPSActionDescriptor->Free(desc0000000000000c20);
+//	if (desc0000000000000c28 != NULL) sPSActionDescriptor->Free(desc0000000000000c28);
+//	if (desc0000000000000c30 != NULL) sPSActionDescriptor->Free(desc0000000000000c30);
+//	if (desc0000000000000c38 != NULL) sPSActionDescriptor->Free(desc0000000000000c38);
+//	return error;
+//}
+
+SPErr PlayhostFocusChanged(/*your parameters go here*/void)
+{
+	PIActionDescriptor result = NULL;
+	DescriptorTypeID runtimeKeyID;
+	DescriptorTypeID runtimeTypeID;
+	DescriptorTypeID runtimeObjID;
+	DescriptorTypeID runtimeEnumID;
+	DescriptorTypeID runtimeClassID;
+	DescriptorTypeID runtimePropID;
+	DescriptorTypeID runtimeUnitID;
+	DescriptorTypeID runtimeEventID;
+	SPErr error = kSPNoError;
+	// Move this to the top of the routine!
+	PIActionDescriptor desc0000000000000c68 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc0000000000000c68);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("active", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutBoolean(desc0000000000000c68, runtimeKeyID, false);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("dontRecord", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutBoolean(desc0000000000000c68, runtimeKeyID, true);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("forceNotify", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutBoolean(desc0000000000000c68, runtimeKeyID, true);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("hostFocusChanged", &runtimeEventID);
+	if (error) goto returnError;
+
+	error = sPSActionControl->Play(&result, runtimeEventID, desc0000000000000c68, plugInDialogSilent);
+	if (error) goto returnError;
+
+returnError:
+	if (result != NULL) sPSActionDescriptor->Free(result);
+	if (desc0000000000000c68 != NULL) sPSActionDescriptor->Free(desc0000000000000c68);
+	return error;
+}
+
+SPErr PlayeventGaussianBlur(/*your parameters go here*/void)
+{
+	PIActionDescriptor result = NULL;
+	DescriptorTypeID runtimeKeyID;
+	DescriptorTypeID runtimeTypeID;
+	DescriptorTypeID runtimeObjID;
+	DescriptorTypeID runtimeEnumID;
+	DescriptorTypeID runtimeClassID;
+	DescriptorTypeID runtimePropID;
+	DescriptorTypeID runtimeUnitID;
+	SPErr error = kSPNoError;
+	// Move this to the top of the routine!
+	PIActionDescriptor desc00000000000028a8 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc00000000000028a8);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutUnitFloat(desc00000000000028a8, keyRadius, unitPixels, 2);
+	if (error) goto returnError;
+
+	error = sPSActionControl->Play(&result, eventGaussianBlur, desc00000000000028a8, plugInDialogSilent);
+	if (error) goto returnError;
+
+returnError:
+	if (result != NULL) sPSActionDescriptor->Free(result);
+	if (desc00000000000028a8 != NULL) sPSActionDescriptor->Free(desc00000000000028a8);
+	return error;
+}
+
 SPErr PlayeventMake(/*your parameters go here*/void)
 {
 	PIActionDescriptor result = NULL;
@@ -943,53 +1325,453 @@ SPErr PlayeventMake(/*your parameters go here*/void)
 	DescriptorTypeID runtimeUnitID;
 	SPErr error = kSPNoError;
 	// Move this to the top of the routine!
-	PIActionDescriptor desc0000000000000ce0 = NULL;
+	PIActionDescriptor desc00000000000029f8 = NULL;
 
-	error = sPSActionDescriptor->Make(&desc0000000000000ce0);
+	error = sPSActionDescriptor->Make(&desc00000000000029f8);
 	if (error) goto returnError;
 
 	// Move this to the top of the routine!
-	PIActionReference ref0000000000000140 = NULL;
-	error = sPSActionReference->Make(&ref0000000000000140);
+	PIActionReference ref00000000000001d0 = NULL;
+	error = sPSActionReference->Make(&ref00000000000001d0);
 	if (error) goto returnError;
 
-	error = sPSActionControl->StringIDToTypeID("layerSection", &runtimeClassID);
+	error = sPSActionReference->PutClass(ref00000000000001d0, classLayer);
 	if (error) goto returnError;
 
-	error = sPSActionControl->StringIDToTypeID("layerSection", &runtimeClassID);
+	error = sPSActionDescriptor->PutReference(desc00000000000029f8, keyNull, ref00000000000001d0);
 	if (error) goto returnError;
 
-	error = sPSActionReference->PutClass(ref0000000000000140, runtimeClassID);
+	error = sPSActionDescriptor->PutInteger(desc00000000000029f8, keyLayerID, 6);
 	if (error) goto returnError;
 
-	error = sPSActionDescriptor->PutReference(desc0000000000000ce0, keyNull, ref0000000000000140);
-	if (error) goto returnError;
-
-	error = sPSActionControl->StringIDToTypeID("layerSectionStart", &runtimeKeyID);
-	if (error) goto returnError;
-
-	error = sPSActionDescriptor->PutInteger(desc0000000000000ce0, runtimeKeyID, 18);
-	if (error) goto returnError;
-
-	error = sPSActionControl->StringIDToTypeID("layerSectionEnd", &runtimeKeyID);
-	if (error) goto returnError;
-
-	error = sPSActionDescriptor->PutInteger(desc0000000000000ce0, runtimeKeyID, 19);
-	if (error) goto returnError;
-
-	// Unicode String as UTF8: 缁?1
-	error = sPSActionDescriptor->PutString(desc0000000000000ce0, keyName, "组 1");
-	if (error) goto returnError;
-
-	error = sPSActionControl->Play(&result, eventMake, desc0000000000000ce0, plugInDialogSilent);
+	error = sPSActionControl->Play(&result, eventMake, desc00000000000029f8, plugInDialogSilent);
 	if (error) goto returnError;
 
 returnError:
 	if (result != NULL) sPSActionDescriptor->Free(result);
-	if (desc0000000000000ce0 != NULL) sPSActionDescriptor->Free(desc0000000000000ce0);
-	if (ref0000000000000140 != NULL) sPSActionReference->Free(ref0000000000000140);
+	if (desc00000000000029f8 != NULL) sPSActionDescriptor->Free(desc00000000000029f8);
+	if (ref00000000000001d0 != NULL) sPSActionReference->Free(ref00000000000001d0);
 	return error;
 }
+
+//选择工具栏的选项
+SPErr PlayeventSelect(/*your parameters go here*/void)
+{
+	PIActionDescriptor result = NULL;
+	DescriptorTypeID runtimeKeyID;
+	DescriptorTypeID runtimeTypeID;
+	DescriptorTypeID runtimeObjID;
+	DescriptorTypeID runtimeEnumID;
+	DescriptorTypeID runtimeClassID;
+	DescriptorTypeID runtimePropID;
+	DescriptorTypeID runtimeUnitID;
+	SPErr error = kSPNoError;
+	// Move this to the top of the routine!
+	PIActionDescriptor desc0000000000002a38 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc0000000000002a38);
+	if (error) goto returnError;
+
+	// Move this to the top of the routine!
+	PIActionReference ref00000000000001d8 = NULL;
+	error = sPSActionReference->Make(&ref00000000000001d8);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("paintbrushTool", &runtimeClassID);//选取框矩形工具marqueeRectTool
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("paintbrushTool", &runtimeClassID);
+	if (error) goto returnError;
+
+	error = sPSActionReference->PutClass(ref00000000000001d8, runtimeClassID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutReference(desc0000000000002a38, keyNull, ref00000000000001d8);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("dontRecord", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutBoolean(desc0000000000002a38, runtimeKeyID, true);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("forceNotify", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutBoolean(desc0000000000002a38, runtimeKeyID, true);
+	if (error) goto returnError;
+
+	error = sPSActionControl->Play(&result, eventSelect, desc0000000000002a38, plugInDialogSilent);
+	if (error) goto returnError;
+
+returnError:
+	if (result != NULL) sPSActionDescriptor->Free(result);
+	if (desc0000000000002a38 != NULL) sPSActionDescriptor->Free(desc0000000000002a38);
+	if (ref00000000000001d8 != NULL) sPSActionReference->Free(ref00000000000001d8);
+	return error;
+}
+
+//SPErr PlayeventSet(/*your parameters go here*/void)
+//{
+//	PIActionDescriptor result = NULL;
+//	DescriptorTypeID runtimeKeyID;
+//	DescriptorTypeID runtimeTypeID;
+//	DescriptorTypeID runtimeObjID;
+//	DescriptorTypeID runtimeEnumID;
+//	DescriptorTypeID runtimeClassID;
+//	DescriptorTypeID runtimePropID;
+//	DescriptorTypeID runtimeUnitID;
+//	SPErr error = kSPNoError;
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000002a98 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000002a98);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionReference ref00000000000001e0 = NULL;
+//	error = sPSActionReference->Make(&ref00000000000001e0);
+//	if (error) goto returnError;
+//
+//	error = sPSActionReference->PutProperty(ref00000000000001e0, classChannel, keySelection);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutReference(desc0000000000002a98, keyNull, ref00000000000001e0);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000002aa0 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000002aa0);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutUnitFloat(desc0000000000002aa0, keyTop, unitPixels, 195);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutUnitFloat(desc0000000000002aa0, keyLeft, unitPixels, 328);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutUnitFloat(desc0000000000002aa0, keyBottom, unitPixels, 259);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutUnitFloat(desc0000000000002aa0, keyRight, unitPixels, 392);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutObject(desc0000000000002a98, keyTo, classRectangle, desc0000000000002aa0);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutUnitFloat(desc0000000000002a98, keyFeather, unitPixels, 3);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->Play(&result, eventSet, desc0000000000002a98, plugInDialogSilent);
+//	if (error) goto returnError;
+//
+//returnError:
+//	if (result != NULL) sPSActionDescriptor->Free(result);
+//	if (desc0000000000002a98 != NULL) sPSActionDescriptor->Free(desc0000000000002a98);
+//	if (ref00000000000001e0 != NULL) sPSActionReference->Free(ref00000000000001e0);
+//	if (desc0000000000002aa0 != NULL) sPSActionDescriptor->Free(desc0000000000002aa0);
+//	return error;
+//}
+
+//SPErr PlayeventSet(/*your parameters go here*/void)
+//{
+//	PIActionDescriptor result = NULL;
+//	DescriptorTypeID runtimeKeyID;
+//	DescriptorTypeID runtimeTypeID;
+//	DescriptorTypeID runtimeObjID;
+//	DescriptorTypeID runtimeEnumID;
+//	DescriptorTypeID runtimeClassID;
+//	DescriptorTypeID runtimePropID;
+//	DescriptorTypeID runtimeUnitID;
+//	SPErr error = kSPNoError;
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000002bb0 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000002bb0);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionReference ref00000000000001f8 = NULL;
+//	error = sPSActionReference->Make(&ref00000000000001f8);
+//	if (error) goto returnError;
+//
+//	error = sPSActionReference->PutProperty(ref00000000000001f8, classChannel, keySelection);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutReference(desc0000000000002bb0, keyNull, ref00000000000001f8);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutEnumerated(desc0000000000002bb0, keyTo, typeOrdinal, enumNone);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->Play(&result, eventSet, desc0000000000002bb0, plugInDialogSilent);
+//	if (error) goto returnError;
+//
+//returnError:
+//	if (result != NULL) sPSActionDescriptor->Free(result);
+//	if (desc0000000000002bb0 != NULL) sPSActionDescriptor->Free(desc0000000000002bb0);
+//	if (ref00000000000001f8 != NULL) sPSActionReference->Free(ref00000000000001f8);
+//	return error;
+//}
+
+SPErr PlaypifInvalidatedAttributes(/*your parameters go here*/void)
+{
+	PIActionDescriptor result = NULL;
+	DescriptorTypeID runtimeKeyID;
+	DescriptorTypeID runtimeTypeID;
+	DescriptorTypeID runtimeObjID;
+	DescriptorTypeID runtimeEnumID;
+	DescriptorTypeID runtimeClassID;
+	DescriptorTypeID runtimePropID;
+	DescriptorTypeID runtimeUnitID;
+	DescriptorTypeID runtimeEventID;
+	SPErr error = kSPNoError;
+	// Move this to the top of the routine!
+	PIActionDescriptor desc0000000000000c18 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc0000000000000c18);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutInteger(desc0000000000000c18, keyDocumentID, 107);
+	if (error) goto returnError;
+
+	// Move this to the top of the routine!
+	PIActionList list00000000000000e0 = NULL;
+	error = sPSActionList->Make(&list00000000000000e0);
+	if (error) goto returnError;
+
+	// Move this to the top of the routine!
+	PIActionDescriptor desc0000000000000c20 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc0000000000000c20);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("attributeType", &runtimeKeyID);
+	if (error) goto returnError;
+
+	// Unicode String as UTF8: classification
+	error = sPSActionDescriptor->PutString(desc0000000000000c20, runtimeKeyID, "classification");
+	if (error) goto returnError;
+
+	// Move this to the top of the routine!
+	PIActionDescriptor desc0000000000000c28 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc0000000000000c28);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("sheetID", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutInteger(desc0000000000000c28, runtimeKeyID, 2);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeObjID);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutObject(desc0000000000000c20, runtimeKeyID, runtimeObjID, desc0000000000000c28);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("pifAttributeKey", &runtimeClassID);
+	if (error) goto returnError;
+
+	error = sPSActionList->PutObject(list00000000000000e0, runtimeClassID, desc0000000000000c20);
+	if (error) goto returnError;
+
+	// Move this to the top of the routine!
+	PIActionDescriptor desc0000000000000c30 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc0000000000000c30);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("attributeType", &runtimeKeyID);
+	if (error) goto returnError;
+
+	// Unicode String as UTF8: faces
+	error = sPSActionDescriptor->PutString(desc0000000000000c30, runtimeKeyID, "faces");
+	if (error) goto returnError;
+
+	// Move this to the top of the routine!
+	PIActionDescriptor desc0000000000000c38 = NULL;
+
+	error = sPSActionDescriptor->Make(&desc0000000000000c38);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("sheetID", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutInteger(desc0000000000000c38, runtimeKeyID, 2);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeObjID);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutObject(desc0000000000000c30, runtimeKeyID, runtimeObjID, desc0000000000000c38);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("pifAttributeKey", &runtimeClassID);
+	if (error) goto returnError;
+
+	error = sPSActionList->PutObject(list00000000000000e0, runtimeClassID, desc0000000000000c30);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("pifAttributeList", &runtimeKeyID);
+	if (error) goto returnError;
+
+	error = sPSActionDescriptor->PutList(desc0000000000000c18, runtimeKeyID, list00000000000000e0);
+	if (error) goto returnError;
+
+	error = sPSActionControl->StringIDToTypeID("pifInvalidatedAttributes", &runtimeEventID);
+	if (error) goto returnError;
+
+	error = sPSActionControl->Play(&result, runtimeEventID, desc0000000000000c18, plugInDialogSilent);
+	if (error) goto returnError;
+
+returnError:
+	if (result != NULL) sPSActionDescriptor->Free(result);
+	if (desc0000000000000c18 != NULL) sPSActionDescriptor->Free(desc0000000000000c18);
+	if (list00000000000000e0 != NULL) sPSActionList->Free(list00000000000000e0);
+	if (desc0000000000000c20 != NULL) sPSActionDescriptor->Free(desc0000000000000c20);
+	if (desc0000000000000c28 != NULL) sPSActionDescriptor->Free(desc0000000000000c28);
+	if (desc0000000000000c30 != NULL) sPSActionDescriptor->Free(desc0000000000000c30);
+	if (desc0000000000000c38 != NULL) sPSActionDescriptor->Free(desc0000000000000c38);
+	return error;
+}
+
+//SPErr PlaypifInvalidatedAttributes(/*your parameters go here*/void)
+//{
+//	PIActionDescriptor result = NULL;
+//	DescriptorTypeID runtimeKeyID;
+//	DescriptorTypeID runtimeTypeID;
+//	DescriptorTypeID runtimeObjID;
+//	DescriptorTypeID runtimeEnumID;
+//	DescriptorTypeID runtimeClassID;
+//	DescriptorTypeID runtimePropID;
+//	DescriptorTypeID runtimeUnitID;
+//	DescriptorTypeID runtimeEventID;
+//	SPErr error = kSPNoError;
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000d38 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000d38);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutInteger(desc0000000000000d38, keyDocumentID, 107);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionList list00000000000000e8 = NULL;
+//	error = sPSActionList->Make(&list00000000000000e8);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000d40 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000d40);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("attributeType", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	// Unicode String as UTF8: classification
+//	error = sPSActionDescriptor->PutString(desc0000000000000d40, runtimeKeyID, "classification");
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000d48 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000d48);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sheetID", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutInteger(desc0000000000000d48, runtimeKeyID, 2);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeObjID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutObject(desc0000000000000d40, runtimeKeyID, runtimeObjID, desc0000000000000d48);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("pifAttributeKey", &runtimeClassID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionList->PutObject(list00000000000000e8, runtimeClassID, desc0000000000000d40);
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000d50 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000d50);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("attributeType", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	// Unicode String as UTF8: faces
+//	error = sPSActionDescriptor->PutString(desc0000000000000d50, runtimeKeyID, "faces");
+//	if (error) goto returnError;
+//
+//	// Move this to the top of the routine!
+//	PIActionDescriptor desc0000000000000d58 = NULL;
+//
+//	error = sPSActionDescriptor->Make(&desc0000000000000d58);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sheetID", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutInteger(desc0000000000000d58, runtimeKeyID, 2);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeObjID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("sourceID", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutObject(desc0000000000000d50, runtimeKeyID, runtimeObjID, desc0000000000000d58);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("pifAttributeKey", &runtimeClassID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionList->PutObject(list00000000000000e8, runtimeClassID, desc0000000000000d50);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("pifAttributeList", &runtimeKeyID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionDescriptor->PutList(desc0000000000000d38, runtimeKeyID, list00000000000000e8);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->StringIDToTypeID("pifInvalidatedAttributes", &runtimeEventID);
+//	if (error) goto returnError;
+//
+//	error = sPSActionControl->Play(&result, runtimeEventID, desc0000000000000d38, plugInDialogSilent);
+//	if (error) goto returnError;
+//
+//returnError:
+//	if (result != NULL) sPSActionDescriptor->Free(result);
+//	if (desc0000000000000d38 != NULL) sPSActionDescriptor->Free(desc0000000000000d38);
+//	if (list00000000000000e8 != NULL) sPSActionList->Free(list00000000000000e8);
+//	if (desc0000000000000d40 != NULL) sPSActionDescriptor->Free(desc0000000000000d40);
+//	if (desc0000000000000d48 != NULL) sPSActionDescriptor->Free(desc0000000000000d48);
+//	if (desc0000000000000d50 != NULL) sPSActionDescriptor->Free(desc0000000000000d50);
+//	if (desc0000000000000d58 != NULL) sPSActionDescriptor->Free(desc0000000000000d58);
+//	return error;
+//}
 
 
 void mycopy()
