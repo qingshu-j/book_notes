@@ -1,0 +1,11 @@
+    <ExtensionList>
+        <!-- 1 -->
+        <Extension Id="com.ugee.premiere.panel">
+           <HostList>
+
+               <!-- 2 -->
+               <Host Name="PPRO" Port="8088"/>
+
+            </HostList>
+        </Extension>
+    </ExtensionList>    

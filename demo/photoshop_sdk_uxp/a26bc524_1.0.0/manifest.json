@@ -1,0 +1,28 @@
+{
+    "id": "a26bc524",
+    "name": "TourBox",
+    "version": "1.0.0",
+    "main": "index.js",
+    "host": {
+        "app": "PS",
+        "minVersion": "22.0.0",
+        "data" : {
+          "loadEvent": "startup"
+        }
+    },
+    "manifestVersion": 4,
+    "entrypoints": [{
+        "type": "command",
+        "id": "TourBoxCommand",
+        "label": { "default": "TourBox Plugin" }
+    }],
+    "icons": [{
+        "width": 48,
+        "height": 48,
+        "path": "icons/tourboxIcon48.png",
+        "scale": [1, 2],
+        "theme": ["darkest", "dark", "medium", "lightest", "light", "all"],
+        "species": ["pluginList"]
+    }],
+    "runOnStartup": true
+}

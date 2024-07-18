@@ -1,0 +1,140 @@
+滚轮动作指令格式
+发送：开发参数名称|动作描述名称|变化值
+例如：
+1.面板 基本
+Temperature|色温|-1
+Temperature|色温|+2
+Tint|色调|+1
+Exposure|曝光度|+1
+Contrast|对比度|+1
+Highlights|高光|+1
+Shadows|阴影|+1
+Whites|白色色阶|+1
+Blacks|黑色色阶|+1
+Texture|纹理|+1
+Clarity|清晰度|+1
+Dehaze|去朦胧|+1
+Vibrance|鲜艳度|+1
+Saturation|饱和度|+1
+LuminanceNoise|杂色|+1
+
+2.面板 色调曲线
+ParametricHighlights|高光|+1
+ParametricLights|亮色调|+1
+ParametricDarks|暗色调|+1
+ParametricShadows|阴影|+1
+ParametricHighlightSplit|高光分离点|+1
+ParametricMidtoneSplit|中间调分离点|+1
+ParametricShadowSplit|阴影分离点|+1
+
+3.面板 混色器
+HueAdjustmentRed|色相 红色|+1
+HueAdjustmentOrange|色相 橙色|+1
+HueAdjustmentYellow|色相 黄色|+1
+HueAdjustmentGreen|色相 绿色|+1
+HueAdjustmentAqua|色相 浅绿色|+1
+HueAdjustmentBlue|色相 蓝色|+1
+HueAdjustmentPurple|色相 紫色|+1
+HueAdjustmentMagenta|色相 洋红|+1
+
+SaturationAdjustmentRed|饱和度  红色|+1
+SaturationAdjustmentOrange|饱和度  橙色|+1
+SaturationAdjustmentYellow|饱和度  黄色|+1
+SaturationAdjustmentGreen|饱和度  绿色|+1
+SaturationAdjustmentAqua|饱和度  浅绿色|+1
+SaturationAdjustmentBlue|饱和度  蓝色|+1
+SaturationAdjustmentPurple|饱和度  紫色|+1
+SaturationAdjustmentMagenta|饱和度  洋红|+1
+
+LuminanceAdjustmentRed|明亮度  红色|+1
+LuminanceAdjustmentOrange|明亮度  橙色|+1
+LuminanceAdjustmentYellow|明亮度  黄色|+1
+LuminanceAdjustmentGreen|明亮度  绿色|+1
+LuminanceAdjustmentAqua|明亮度  浅绿色|+1
+LuminanceAdjustmentBlue|明亮度  蓝色|+1
+LuminanceAdjustmentPurple|明亮度  紫色|+1
+LuminanceAdjustmentMagenta|明亮度  洋红|+1
+
+GrayMixerRed|黑白混合 红色|+1
+GrayMixerOrange|黑白混合 橙色|+1
+GrayMixerYellow|黑白混合 黄色|+1
+GrayMixerGreen|黑白混合 绿色|+1
+GrayMixerAqua|黑白混合 浅绿色|+1
+GrayMixerBlue|黑白混合 蓝色|+1
+GrayMixerPurple|黑白混合 紫色|+1
+GrayMixerMagenta|黑白混合 洋红|+1
+
+.面板 分离色调
+SplitToningHighlightHue|高光 色相|+1
+SplitToningHighlightSaturation|高光 饱和度|+1
+SplitToningBalance|平衡|+1
+SplitToningShadowHue|阴影 色相|+1
+SplitToningShadowSaturation|阴影 饱和度|+1
+
+4.面板 颜色分级
+SplitToningShadowHue|阴影 色相|+1
+SplitToningShadowSaturation|阴影 饱和度|+1
+ColorGradeShadowLum|阴影 明亮度|+1
+SplitToningHighlightHue|高光 色相|+1
+SplitToningHighlightSaturation|高光 饱和度|+1
+ColorGradeHighlightLum|高光 明亮度|+1
+ColorGradeMidtoneHue|中间调 色相|+1
+ColorGradeMidtoneSat|中间调 饱和度|+1
+ColorGradeMidtoneLum|中间调 明亮度|+1
+ColorGradeGlobalHue|全局 色相|+1
+ColorGradeGlobalSat|全局 饱和度|+1
+ColorGradeGlobalLum|全局 明亮度|+1
+ColorGradeBlending|混合|+1
+SplitToningBalance|平衡|+1
+
+5.面板 细节
+Sharpness|锐化 数量|+1
+SharpenRadius|锐化 半径|+1
+SharpenDetail|锐化 细节|+1
+SharpenEdgeMasking|锐化 蒙版|+1
+LuminanceSmoothing|噪点消除 明亮度|+1
+LuminanceNoiseReductionDetail|噪点消除 细节|+1
+LuminanceNoiseReductionContrast|噪点消除 对比度|+1
+ColorNoiseReduction|噪点消除 颜色|+1
+ColorNoiseReductionDetail|噪点消除 细节|+1
+ColorNoiseReductionSmoothness|噪点消除 平滑度|+1
+
+6.面板 效果
+PostCropVignetteAmount|裁剪后暗角 数量|+1
+PostCropVignetteMidpoint|裁剪后暗角 中点|+1
+PostCropVignetteRoundness|裁剪后暗角 圆度|+1
+PostCropVignetteFeather|裁剪后暗角 羽化|+1
+PostCropVignetteHighlightContrast|裁剪后暗角 高光|+1
+GrainAmount|颗粒 数量|+1
+GrainSize|颗粒 大小|+1
+GrainFrequency|颗粒 粗糙度|+1
+
+7.面板 镜头校正
+未发现效果，暂不实现
+
+8.面板 变换
+PerspectiveVertical|变换 垂直|+3
+PerspectiveHorizontal|变换 水平|+1
+PerspectiveRotate|变换 旋转|+1
+PerspectiveAspect|变换 长宽比|+1
+PerspectiveScale|变换 比例|+1
+PerspectiveX|变换 X轴偏移|+1
+PerspectiveY|变换 Y轴偏移|+1
+
+8.面板 校准
+ShadowTint|阴影 色调|+1
+RedHue|红原色 色相|+1
+RedSaturation|红原色 饱和度|+1
+GreenHue|绿原色 色相|+1
+GreenSaturation|绿原色 饱和度|+1
+BlueHue|蓝原色 色相|+1
+BlueSaturation|蓝原色 饱和度|+1
+
+裁剪>>角度
+straightenAngle|角度|+1
+
+通用>>
+暂不实现
+
+预设>>
+applyDevelopPreset|""|增强人像&66DCC3541A8DC7DB5FC26C61280FD4E9
