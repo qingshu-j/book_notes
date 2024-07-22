@@ -67,7 +67,7 @@ bool CmdHandle::HandleCmd(unsigned char* cmd, unsigned int len, unsigned int* By
 		//read
 		bRet = do_get(cmdsrc, len + 2, p, Bytes);
 	}
-
+	delete[] cmdsrc;
 	return bRet;
 }
 
