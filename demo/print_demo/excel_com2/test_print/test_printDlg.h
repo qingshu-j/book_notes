@@ -42,6 +42,7 @@ public:
 	afx_msg void OnBnClickedButton3();
 
 	bool InitExcel();
+	void InitPrintFileDir();
 	BOOL PrintExcel(const CString& strPath);
 	BOOL PrintOneSheet(const CString& strPath);
 private:
@@ -51,5 +52,5 @@ private:
 	CWorksheetEx m_WorkSheet;
 public:
 	afx_msg void OnBnClickedButton4();
-	void GetExcelFiles(CArray<CString>& array);
+	void GetExcelFiles(const char* to_search, CArray<CString>& array);
 };

@@ -123,14 +123,13 @@ BOOL Ctest_printDlg::OnInitDialog()
 	DWORD len2 = 0x20;
 	CArray<CString> array, array1;
 	EnumPrintersName(array);
-	GetExcelFiles(array1);
 	GetDefaultPrinter(defaultName, &len);
 	SetDlgItemText(IDC_EDIT1, defaultName);
 	if (array.GetSize())
 	{
 		((CComboBox*)GetDlgItem(IDC_COMBO1))->SetCurSel(0);
 	}
-
+	InitPrintFileDir();
 	InitExcel();
 	
 	//CString strdefaultName = defaultName;
@@ -298,6 +297,23 @@ bool Ctest_printDlg::InitExcel()
 	return TRUE;
 }
 
+void Ctest_printDlg::InitPrintFileDir()
+{
+	TCHAR buf[0x80] = { 0 };
+	DWORD dwRet = GetPrivateProfileString(_T("PrintConfig"), _T("PrintFileDir"), NULL, buf,sizeof(TCHAR)*0x80, _T(".\\config.ini"));
+	if (0 == dwRet)
+	{
+		MessageBox(_T("找不到文件名config.ini或区域名PrintConfig或键名PrintFileDir"));
+		return;
+	}
+	CString strPath(buf);
+	if (strPath.GetAt(strPath.GetLength()-1) != _T('\\'))
+	{
+		strPath += _T('\\');
+	}
+	SetDlgItemText(IDC_EDIT2, strPath);
+}
+
 BOOL Ctest_printDlg::PrintExcel(const CString& strPath)
 {
 	//InitExcel();
@@ -360,14 +376,32 @@ void Ctest_printDlg::OnBnClickedButton4()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	CString str, strFilePathName;
-	GetDlgItemText(IDC_EDIT2, strFilePathName);
-	if (!strFilePathName.GetLength())
+	CString str, strFilePathName,strSN,strDir;
+	GetDlgItemText(IDC_EDIT2, strDir);
+	if (!strDir.GetLength())
 	{
 		MessageBox(_T("打印文件路径为空"));
 		return;
 	}
+	GetDlgItemText(IDC_EDIT3, strSN);
+	if (!strSN.GetLength())
+	{
+		MessageBox(_T("SN为空"));
+		return;
+	}
+	CArray<CString> array1;
+	CStringA strDirA = CT2A(strDir)+"*";
+	GetExcelFiles(strDirA.GetBuffer(),array1);
+	for (int i=0;i<array1.GetSize();i++)
+	{
+		if (-1 != array1[i].Find(strSN))
+		{
+			strFilePathName = strDir + array1[i];
+			break;
+		}
+	}
 	
+
 	if (PrintOneSheet(strFilePathName))
 	{
 		str = _T("成功");
@@ -376,13 +410,14 @@ void Ctest_printDlg::OnBnClickedButton4()
 	{
 		str = _T("失败");
 	}
-	MessageBox(str);
+	//MessageBox(str);
+	SetDlgItemText(IDC_EDIT3, _T(""));
 }
 
-void Ctest_printDlg::GetExcelFiles(CArray<CString>& array)
+void Ctest_printDlg::GetExcelFiles(const char* to_search,CArray<CString>& array)
 {
 	CString fileName;
-	const char *to_search = "C:\\Users\\13506\\Desktop\\*.*";
+	//const char *to_search = "C:\\Users\\13506\\Desktop\\*.*";
 	long handle;//用于查找句柄
 	struct _finddata_t fileinfo;//文件信息的结构体
 	handle = _findfirst(to_search, &fileinfo);//第一次查找
